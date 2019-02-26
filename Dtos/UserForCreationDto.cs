@@ -1,5 +1,4 @@
-﻿using System;
-namespace Auth.Dtos
+﻿namespace Auth.Dtos
 {
     public class UserForCreationDto
     {

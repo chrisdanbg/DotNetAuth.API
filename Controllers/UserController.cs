@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Auth.Data;
 using Auth.Dtos;
 using Auth.Helpers;
 using AutoMapper;
@@ -64,6 +65,18 @@ namespace Auth.Controllers
                 LastName = user.LastName,
                 Token = token
             });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]UserForCreationDto userForCreationDto)
+        {
+            userForCreationDto.Username = userForCreationDto.Username.ToLower();
+
+            var user = _mapper.Map<User>(userForCreationDto);
+
+            var createdUser = await _repo.Create(user, userForCreationDto.Password);
+            return Ok(createdUser);
         }
     }
 
