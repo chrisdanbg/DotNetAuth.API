@@ -1,8 +1,10 @@
-﻿using Auth.Data;
+﻿using System.Text;
+using Auth.Data;
 using Auth.Dtos;
 using Auth.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,15 +25,24 @@ namespace Auth
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddScoped<IUserService, UserService>();
 
-            services.AddScoped<AppSettings>();
             var appSettingsSection = Configuration.GetSection("AppSettings");
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddScoped<AppSettings>();
             services.Configure<AppSettings>(appSettingsSection);
 
             services.AddAutoMapper();
             services.AddDbContext<DataContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,8 +57,11 @@ namespace Auth
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+            app.UseAuthentication();
             app.UseMvc();
+
+          
         }
     }
 }

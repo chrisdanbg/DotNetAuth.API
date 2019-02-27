@@ -5,12 +5,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Cors;
 using Auth.Data;
 using Auth.Dtos;
 using Auth.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,11 +26,11 @@ namespace Auth.Controllers
         private IMapper _mapper;
         private AppSettings _appSettings;
 
-        public UserController(IUserService repo, IMapper mapper, AppSettings appSettings)
+        public UserController(IUserService repo, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _repo = repo;
             _mapper = mapper;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
         public SigningCredentials SigningCredentials { get; private set; }
@@ -59,10 +61,8 @@ namespace Auth.Controllers
 
             return Ok(new
             {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                user.Id,
+                user.Username,
                 Token = token
             });
         }
@@ -78,6 +78,7 @@ namespace Auth.Controllers
             var createdUser = await _repo.Create(user, userForCreationDto.Password);
             return Ok(createdUser);
         }
+
     }
 
 
