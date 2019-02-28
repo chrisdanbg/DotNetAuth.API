@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Auth.Controllers
 {
     [Authorize, ApiController, Route("[controller]")]
@@ -61,7 +59,6 @@ namespace Auth.Controllers
 
             return Ok(new
             {
-                user.Id,
                 user.Username,
                 Token = tokenString
             });
@@ -80,6 +77,4 @@ namespace Auth.Controllers
         }
 
     }
-
-
 }

@@ -63,26 +63,6 @@ namespace Auth.Dtos
             return user;
         }
 
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(User user, string password = null)
-        {
-            throw new NotImplementedException();
-        }
-
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
