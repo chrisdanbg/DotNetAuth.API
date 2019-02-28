@@ -1,6 +1,6 @@
 ## About the Project
-Full build Social Network API for the purposes of my Social Network Angular SPA.
-Integraded with written by myself Messaging, Like, Find and Match social functions.
+My goal with building this project was to learn the authorization and JWT token processes that take place when a User is registering and loging in.
+For the purpose of it I created a simple Angular application that sends a post request to the API that returns an authorization token to be used in the browser's local storage. 
 
 ## Stack and experience
 Building this project I've expanded my knowledge on:
