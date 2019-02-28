@@ -1,21 +1,35 @@
-<h2>Login</h2>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+  <h1 *ngIf="loggedIn()">Well I guess it works !</h1>
+  <button *ngIf="loggedIn()" class="btn btn-primary btn-block" (click)="logout()" href="#">Logout</button>
+
+  <form *ngIf="!loggedIn() && !registerMode" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h2>Login</h2>
+
     <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" formControlName="username" class="form-control"/>
-        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-            <div *ngIf="f.username.errors.required">Username is required</div>
-        </div>
+      <label for="username">Username</label>
+      <input type="text" formControlName="username" class="form-control" />
+      <div *ngIf="submitted && f.username.errors" class="mt-1 alert alert-danger">
+        <div *ngIf="f.username.errors.required">Username is required</div>
+      </div>
     </div>
     <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" formControlName="password" class="form-control"  />
-        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-            <div *ngIf="f.password.errors.required">Password is required</div>
-        </div>
+      <label for="password">Password</label>
+      <input type="password" formControlName="password" class="form-control" />
+      <div *ngIf="submitted && f.password.errors" class="mt-1 alert alert-danger">
+        <div *ngIf="f.password.errors.required">Password is required</div>
+      </div>
     </div>
     <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">Login</button>
-        <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+      <button [disabled]="loading" class="btn btn-primary">Login</button>
+      <button class="ml-3 btn btn-secondary" (click)="register()">Register</button>
     </div>
-</form>
+
+    <div *ngIf="errorMessage" class="mt-1 alert alert-danger">
+      <div>Username or password is not correct please try again!</div>
+    </div>
+  </form>
+
+  <app-register *ngIf="registerMode" (cancelRegister)="cancelRegister($event)">RegisterMode</app-register>
+
+
+

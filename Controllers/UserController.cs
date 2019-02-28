@@ -63,7 +63,7 @@ namespace Auth.Controllers
             {
                 user.Id,
                 user.Username,
-                Token = token
+                Token = tokenString
             });
         }
 

@@ -10,39 +10,60 @@ import { first } from 'rxjs/operators';
 })
 
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  submitted = false;
-  returnUrl: string;
+    loginForm: FormGroup;
+    loading = false;
+    submitted = false;
+    returnUrl: string;
+    model: any;
+    errorMessage: any;
+    registerMode = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
+    constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
 
-  ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      username: [],
-      password: []
-    });
-  }
-
-  get f() { return this.loginForm.controls; }
-
-  onSubmit() {
-    this.submitted = true;
-
-    if (this.loginForm.invalid) {
-      return;
+    ngOnInit() {
+      this.loginForm = this.formBuilder.group({
+        username: ['',Validators.required],
+        password: ['', Validators.required]
+      });
     }
 
-    this.loading = true;
-    this.authService.login(this.f.username.value , this.f.password.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          console.log(data);
-          this.loading = false;
-        }, error => {
-          console.log(error);
-          this.loading = false;
-        });
-  }
+    get f() { return this.loginForm.controls; }
+
+    onSubmit() {
+      this.submitted = true;
+
+      if (this.loginForm.invalid) {
+        return;
+      }
+      
+      this.loading = true;
+      this.authService.login(this.f.username.value , this.f.password.value)
+        .pipe(first())
+        .subscribe(
+            next => {
+                this.loading = false;
+            }, error => { 
+                this.errorMessage = error.error;
+                this.loading = false;
+                return;
+          });
+    }
+
+    loggedIn() {
+        return this.authService.loggedIn();
+    }
+
+    logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.authService.decodedToken = null;
+    }
+
+    register() {
+        this.registerMode = true;
+    }
+
+    cancelRegister(registerMode: boolean) {
+        this.registerMode = registerMode;
+    }
 }
